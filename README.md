@@ -13,6 +13,8 @@ The target state is the class of two-qubit Werner states
 \rho_W(\alpha)=\alpha\ket{\psi^-}\bra{\psi^-}+(1-\alpha)\mathbb{1}/4.
 
 We are starting with 6 measurements, each with 2 results.
+
+The files are: LHSqubit.py (calls the functions), estrategias.py (creates the deterministic strategies), polyhedron.py (creates and plots the polyhedrons) and SDP_LHS.py (the SDP function).
   
 ## Dependencies
 - picos
