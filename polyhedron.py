@@ -1,4 +1,4 @@
-#Montando um icosaedro (12 vértices)
+#Montando os poliedros
 
 import numpy as np
 import math
@@ -7,6 +7,63 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import pyplot as plt
 from scipy.spatial import ConvexHull
+
+def tetraedro():
+
+    #Retorna os vértices do tetraedro
+
+    vert = np.zeros([4,3])
+
+    vert[0] = np.array([1.0,1.0,1.0])
+    vert[1] = np.array([1.0,-1.0,-1.0])
+    vert[2] = np.array([-1.0,1.0,-1.0])
+    vert[3] = np.array([-1.0,-1.0,1.0])
+
+    #Normalizando os vetores dos vértices
+    for i in range(0,4):
+        vert[i] = vert[i]/math.sqrt(np.dot(vert[i],vert[i]))
+        
+    return vert
+    
+def octaedro():
+
+    #Retorna os vértices do tetraedro
+
+    vert = np.zeros([6,3])
+
+    vert[0] = np.array([1.0,0.0,0.0])
+    vert[1] = np.array([-1.0,0.0,0.0])
+    vert[2] = np.array([0.0,1.0,0.0])
+    vert[3] = np.array([0.0,-1.0,0.0])
+    vert[4] = np.array([0.0,0.0,1.0])
+    vert[5] = np.array([0.0,0.0,-1.0])
+
+    #Normalizando os vetores dos vértices
+    for i in range(0,6):
+        vert[i] = vert[i]/math.sqrt(np.dot(vert[i],vert[i]))
+        
+    return vert
+
+def cube():
+
+    #Retorna os vértices do tetraedro
+
+    vert = np.zeros([8,3])
+
+    vert[0] = np.array([1.0,1.0,1.0])
+    vert[1] = np.array([1.0,1.0,-1.0])
+    vert[2] = np.array([1.0,-1.0,1.0])
+    vert[3] = np.array([-1.0,1.0,1.0])
+    vert[4] = np.array([-1.0,1.0,-1.0])
+    vert[5] = np.array([-1.0,-1.0,1.0])
+    vert[6] = np.array([1.0,-1.0,-1.0])
+    vert[7] = np.array([-1.0,-1.0,-1.0])
+
+    #Normalizando os vetores dos vértices
+    for i in range(0,8):
+        vert[i] = vert[i]/math.sqrt(np.dot(vert[i],vert[i]))
+        
+    return vert
 
 def icosaedro():
 
@@ -31,6 +88,41 @@ def icosaedro():
 
     #Normalizando os vetores dos vértices
     for i in range(0,12):
+        vert[i] = vert[i]/math.sqrt(np.dot(vert[i],vert[i]))
+        
+    return vert
+
+def dodecaedro():
+
+    #Retorna os vértices do tetraedro
+
+    vert = np.zeros([20,3])
+    
+    gr = ((1+math.sqrt(5))/2)#Golden ratio
+
+    vert[0] = np.array([1.0,1.0,1.0])
+    vert[1] = np.array([1.0,1.0,-1.0])
+    vert[2] = np.array([1.0,-1.0,1.0])
+    vert[3] = np.array([-1.0,1.0,1.0])
+    vert[4] = np.array([-1.0,1.0,-1.0])
+    vert[5] = np.array([-1.0,-1.0,1.0])
+    vert[6] = np.array([1.0,-1.0,-1.0])
+    vert[7] = np.array([-1.0,-1.0,-1.0])
+    vert[8] = np.array([0.0,gr,1/gr])
+    vert[9] = np.array([0.0,-gr,-1/gr])
+    vert[10] = np.array([0.0,gr,-1/gr])
+    vert[11] = np.array([0.0,-gr,1/gr])
+    vert[12] = np.array([gr,1/gr,0.0])
+    vert[13] = np.array([gr,-1/gr,0.0])
+    vert[14] = np.array([-gr,1/gr,0.0])
+    vert[15] = np.array([-gr,-1/gr,0.0])
+    vert[16] = np.array([1/gr,0.0,gr])
+    vert[17] = np.array([1/gr,0.0,-gr])
+    vert[18] = np.array([-1/gr,0.0,gr])
+    vert[19] = np.array([-1/gr,0.0,-gr])
+
+    #Normalizando os vetores dos vértices
+    for i in range(0,20):
         vert[i] = vert[i]/math.sqrt(np.dot(vert[i],vert[i]))
         
     return vert
@@ -74,11 +166,8 @@ def plot_polyhedron(vert):
     ax.add_collection3d(polys)
     plt.show()
     
-    
     return 
-    
-    
 
-#vert = icosaedro()
-#print(math.sqrt(np.dot(vert[1],vert[1])))
-#plot_polyhedron(vert)
+vert = dodecaedro()
+print(math.sqrt(np.dot(vert[1],vert[1])))
+plot_polyhedron(vert)
