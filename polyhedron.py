@@ -145,18 +145,25 @@ def plot_polyhedron(vert):
     polys.set_edgecolor('deeppink')
     polys.set_linewidth(.8)
     polys.set_facecolor('hotpink')
-    polys.set_alpha(.15)
+    polys.set_alpha(.25)
     
-    #Construindo a esfera
+    #Construindo a esfera interna
     u, v = np.mgrid[0:2*np.pi:50j, 0:np.pi:50j]
     x = r*np.cos(u)*np.sin(v)
     y = r*np.sin(u)*np.sin(v)
     z = r*np.cos(v)
     
+    #Construindo a esfera unitária
+    x_uni = np.cos(u)*np.sin(v)
+    y_uni = np.sin(u)*np.sin(v)
+    z_uni = np.cos(v)
+    
     ax = Axes3D(plt.figure())
     
     #Plot insphere
-    ax.plot_surface(x,y,z,color='lime',alpha=.15)
+    ax.plot_surface(x,y,z,color='lime',alpha=.35)
+    #Plot unitary sphere
+    ax.plot_surface(x_uni,y_uni,z_uni,color='lightgray',alpha=.15)
     #Plot polyhedron
     ax.set_xlim3d(-1,1)
     ax.set_ylim3d(-1,1)
