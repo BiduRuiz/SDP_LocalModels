@@ -12,10 +12,11 @@ The target state is the class of two-qubit Werner states
 
 \rho_W(\alpha)=\alpha\ket{\psi^-}\bra{\psi^-}+(1-\alpha)\mathbb{1}/4.
 
-We are starting with 6 measurements, each with 2 results.
+We are starting with 3 measurements, each with 2 results.
 
-The files are: LHSqubit.py (calls the functions), estrategias.py (creates the deterministic strategies), polyhedron.py (creates and plots the polyhedrons) and SDP_LHS.py (the SDP function).
-  
+The files are: LHS_alpha.py (calls the functions), WernerClass.py (creates the class of states), estrategias.py (creates the deterministic strategies), poly.py (creates and plots the polyhedrons and measurements), polyhedron.py (is not used anymore, but it has the polyhedrons without keeping the measurements fixed) and SDP_alpha.py (the SDP function). If instead of find \alpha (with is q in the SDP) you just want to find the local model, then you can fix the q in SDP_model.py and run LHS_model.py.
+
+LHV_alpha calls a diferent SDP, which is in SDP_alpha, but it is not working, just ignore it for now...
 ## Dependencies
 - picos
 - numpy
