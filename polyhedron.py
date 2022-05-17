@@ -27,7 +27,7 @@ def tetraedro():
     
 def octaedro():
 
-    #Retorna os vértices do tetraedro
+    #Retorna os vértices do octaedro
 
     vert = np.zeros([6,3])
 
@@ -44,9 +44,9 @@ def octaedro():
         
     return vert
 
-def cube():
+def cubo():
 
-    #Retorna os vértices do tetraedro
+    #Retorna os vértices do cubo
 
     vert = np.zeros([8,3])
 
@@ -94,7 +94,7 @@ def icosaedro():
 
 def dodecaedro():
 
-    #Retorna os vértices do tetraedro
+    #Retorna os vértices do dodecaedro
 
     vert = np.zeros([20,3])
     
@@ -126,7 +126,23 @@ def dodecaedro():
         vert[i] = vert[i]/math.sqrt(np.dot(vert[i],vert[i]))
         
     return vert
+
+def vertices(m):
+    #m é o número de vertices
     
+    if m == 4:
+    	vert = tetraedro()
+    elif m == 6:
+    	vert = octaedro()
+    elif m == 8:
+    	vert = cubo()
+    elif m == 12:
+    	vert = icosaedro()
+    elif m ==20:
+    	vert = dodecaedro()
+
+    return vert
+
 def polyhedron(vert):
     #Poliedro
     hull = ConvexHull(vert)
@@ -169,12 +185,27 @@ def plot_polyhedron(vert):
     ax.set_ylim3d(-1,1)
     ax.set_zlim3d(-1,1)
     ax.set_box_aspect([1,1,1])
+    #plt.axis('off')
 
     ax.add_collection3d(polys)
     plt.show()
     
     return 
 
-vert = dodecaedro()
-print(math.sqrt(np.dot(vert[1],vert[1])))
-plot_polyhedron(vert)
+#vert = vertices(6)
+#print(vert.shape)
+#plot_polyhedron(vert)
+#vert = vertices(6)
+#print(vert.shape)
+#plot_polyhedron(vert)
+#vert = vertices(8)
+#print(vert.shape)
+#plot_polyhedron(vert)
+#vert = vertices(12)
+#print(vert.shape)
+#plot_polyhedron(vert)
+#vert = vertices(20)
+#print(vert.shape)
+#plot_polyhedron(vert)
+#hull, r = polyhedron(vert)
+#print(r)

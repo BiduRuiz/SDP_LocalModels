@@ -38,10 +38,11 @@ def strategies_LHV(m_A,k_A,m_B,k_B):
     detp = np.kron(detp_A,detp_B)
 
     return detp
-
 #est1 = strategies_LHS(2,2)
 
 #print(est1)
+#print(est1[1])
+#print(est1[1][1])
 #print(len(est1))
 
 #est_2 = strategies_LHV(2,2,2,2)

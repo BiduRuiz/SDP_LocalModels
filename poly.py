@@ -1,4 +1,5 @@
 import numpy as np
+import math #Usar sqrt
 #Para o plot:
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from mpl_toolkits.mplot3d import Axes3D
@@ -36,7 +37,26 @@ def vertices(n):
 
     vert = np.unique(vert,axis=0)
 
-    return theta,phi,vert
+    return vert
+    
+def medicoes(vert):
+    m_k = vert.shape[0]
+    medicoes = np.zeros([m_k,2,2], dtype=complex)
+
+    sum_med = np.zeros([2,2])
+
+    for i in range(m_k):
+        med_00 = (1+vert[i][2])/2
+        med_01 = (vert[i][0]-vert[i][1]*1j)/2
+        med_10 = (vert[i][0]+vert[i][1]*1j)/2
+        med_11 = (1-vert[i][2])/2
+    
+        medicoes[i] = [[med_00,med_01],[med_10,med_11]]
+    
+        #Garantir que a soma por medição é a matriz identidade!
+        sum_med = sum_med + medicoes[i]
+        
+    return medicoes, sum_med
 
 def polyhedron(vert):
     #Poliedro
@@ -87,9 +107,7 @@ def plot_polyhedron(vert):
     
     return 
     
-#theta, phi, vert= vertices(2)
-#print(np.degrees(theta))
-#print(np.degrees(phi))
+#vert= vertices(1)
 #print(vert.shape)
 #hull, r = polyhedron(vert)
 #print(r)
