@@ -58,13 +58,13 @@ def SDP_LHS_alpha(k_out,m_mea,rho_ent,rho_loc,eta_in,estrategias,medicoes):
     est = pic.Constant('est_det',estrategias)
     mea = [pic.Constant('meas[{}]'.format(i),medicoes[i])for i in range(k*m)]
     #Matrix identidade 2x2:
-    iMat = pic.Constant('I', np.eye(2,dtype='complex'))
+    #iMat = pic.Constant('I', np.eye(2,dtype='complex'))
     
     #Variáveis
-    q = pic.RealVariable('q')
-    chi = pic.ComplexVariable('chi',(4,4))
-    #Definindo o amsenble {Sigma}_lambda que queremos encontrar
-    sigma = [prob.add_variable('sigma[{}]'.format(i), (2, 2), 'hermitian') for i in range(k**m)]
+    q = prob.add_variable('q')
+    chi = prob.add_variable('chi',(4,4),vtype='hermitian')
+    #Definindo {Sigma}_lambda que queremos encontrar
+    sigma = [prob.add_variable('sigma[{}]'.format(i), (2, 2),vtype='hermitian') for i in range(k**m)]
     
     #Objetivo do SDP: q* = max(q)
     prob.set_objective('max',q)
@@ -73,13 +73,19 @@ def SDP_LHS_alpha(k_out,m_mea,rho_ent,rho_loc,eta_in,estrategias,medicoes):
     prob.add_constraint(q>=0)
     prob.add_constraint(q<=1)
     prob.add_list_of_constraints([sigma[i]>>0 for i in range(k**m)])
-    
+    #prob.add_list_of_constraints([pic.trace(sigma[i]) == 1 for i in range(k**m)])   
     #Definindo as outras restrições
     prob.add_constraint(q*rho+(1-q)*rho_sep == eta*chi+(1-eta)*(((pic.partial_trace(rho_sep,subsystems=(1),dimensions=(2,2))))@(pic.partial_trace(chi,subsystems=(0),dimensions=(2,2)))))
-    prob.add_list_of_constraints([pic.partial_trace((mea[i]@(iMat))*chi,subsystems=(0),dimensions=(2,2)) == pic.sum([estrategias[j][i]*sigma[j]for j in range(k**m)]) for i in range(k*m)])
+    prob.add_list_of_constraints([pic.partial_trace((mea[i]@(pic.partial_trace(rho_sep,subsystems=(0),dimensions=(2,2))))*chi,subsystems=(0),dimensions=(2,2)) == pic.sum([estrategias[j][i]*sigma[j]for j in range(k**m)]) for i in range(k*m)])
 
     #Resolvendo o SDP
     prob.options.solver = 'mosek'
     solution = prob.solve()
+
+    # for j in range(k**m):
+    #     print('Sigma')
+    #     print(sigma[j]) 
+    #     print('Soma')
+    #     print(pic.sum([estrategias[j][i]*sigma[j]for i in range(k*m)]))
     
     return sigma, q, chi, solution, prob

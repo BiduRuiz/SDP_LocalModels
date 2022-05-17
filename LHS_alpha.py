@@ -14,19 +14,15 @@ import estrategias as est #Estratégias determinísticas
 import SDP_alpha as sdp #SDP LHS
 import WernerClass as wc #Criando o estado
 
-#Primeira etapa: Estado alvo -> classe de estados de Werner de dois qubits
+#Estado alvo -> classe de estados de Werner de dois qubits
 
 rho, rho_sep = wc.WernerClass()
 
-#Segunda etapa: Mapa ruidoso
-
-#xi = tr_B(rho_sep)
-
-#Terceira etapa: Criando loop de medições
+#Criando loop de medições
 
 k = 2
 
-n_ciclos = 3
+n_ciclos = 1
 
 solutions = np.zeros(n_ciclos)
 etas = np.zeros(n_ciclos)
@@ -45,12 +41,12 @@ for n in range(n_ciclos):
     m_k = vert.shape[0]
     medicoes, sum_med = pol.medicoes(vert)
 
-    #Quinta etapa: Montar as estratégias determinísticas
+    #Montar as estratégias determinísticas
 
     m = int(m_k/k)
     det_est = est.strategies_LHS(m,k)
 
-    #Sexta etapa: Aplicar SDP
+    #Aplicar SDP
     
     sigma, q, chi, solution, prob = sdp.SDP_LHS_alpha(k,m,rho,rho_sep,eta,det_est,medicoes)
     

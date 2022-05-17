@@ -64,4 +64,5 @@ for n in range(n_ciclos):
     
 for i in range(n_ciclos):
     #print('q:',solutions[i],'eta:',etas[i],'chi:',chis[i])
+    print(i)
     print('eta:',etas[i],'chi:',chis[i],'sigma:',sigma[0])
