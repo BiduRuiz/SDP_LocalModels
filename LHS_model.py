@@ -11,7 +11,7 @@ import math #Usar sqrt
 #import polyhedron as pol #Vértices e plot dos poliedros
 import poly as pol #Vértices, plot dos poliedros e medicoes
 import estrategias as est #Estratégias determinísticas
-import SDP_LHS as sdp #SDP LHS
+import SDP_model as sdp #SDP LHS
 import WernerClass as wc #Criando o estado
 
 #Primeira etapa: Estado alvo -> classe de estados de Werner de dois qubits

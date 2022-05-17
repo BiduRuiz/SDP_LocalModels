@@ -4,7 +4,7 @@ import numpy as np #Usar arrays
 import math #Usar sqrt
 import polyhedron as pol #Vértices e plot dos poliedros
 import estrategias as est #Estratégias determinísticas
-import SDP as sdp #SDP LHS
+import SDP_alpha as sdp #SDP LHS
 import WernerClass as wc #Criando o estado
 
 #Primeira etapa: Estado alvo -> classe de estados de Werner de dois qubits

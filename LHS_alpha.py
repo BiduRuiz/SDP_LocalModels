@@ -11,7 +11,7 @@ import math #Usar sqrt
 #import polyhedron as pol #Vértices e plot dos poliedros
 import poly as pol #Vértices, plot dos poliedros e medicoes
 import estrategias as est #Estratégias determinísticas
-import SDP as sdp #SDP LHS
+import SDP_alpha as sdp #SDP LHS
 import WernerClass as wc #Criando o estado
 
 #Primeira etapa: Estado alvo -> classe de estados de Werner de dois qubits
@@ -26,7 +26,7 @@ rho, rho_sep = wc.WernerClass()
 
 k = 2
 
-n_ciclos = 2
+n_ciclos = 3
 
 solutions = np.zeros(n_ciclos)
 etas = np.zeros(n_ciclos)
