@@ -2,6 +2,11 @@ import picos as pic
 import numpy as np
 import math #Usar sqrt
 from scipy.spatial import ConvexHull #Medições
+import time
+#Para o plot:
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import pyplot as plt
 
 
 def states():
@@ -63,6 +68,43 @@ def measurements(n):
     #Insphere radius
     r = np.min(np.abs(hull.equations[:, -1]))
 
+    #Plota o poliedro recebendo apenas os vertices da forma: [[x,y,z],[x,y,z],...]
+
+    # polys = Poly3DCollection([hull.points[simplex] for simplex in hull.simplices])
+
+    # polys.set_edgecolor('deeppink')
+    # polys.set_linewidth(.8)
+    # polys.set_facecolor('hotpink')
+    # polys.set_alpha(.25)
+    
+    # #Construindo a esfera interna
+    # u, v = np.mgrid[0:2*np.pi:50j, 0:np.pi:50j]
+    # x = r*np.cos(u)*np.sin(v)
+    # y = r*np.sin(u)*np.sin(v)
+    # z = r*np.cos(v)
+    
+    # #Construindo a esfera unitária
+    # x_uni = np.cos(u)*np.sin(v)
+    # y_uni = np.sin(u)*np.sin(v)
+    # z_uni = np.cos(v)
+    
+    # ax = Axes3D(plt.figure())
+    
+    # #Plot insphere
+    # ax.plot_surface(x,y,z,color='lime',alpha=.35)
+    # #Plot unitary sphere
+    # ax.plot_surface(x_uni,y_uni,z_uni,color='lightgray',alpha=.15)
+    # #Plot polyhedron
+    # ax.set_xlim3d(-1,1)
+    # ax.set_ylim3d(-1,1)
+    # ax.set_zlim3d(-1,1)
+    # ax.set_box_aspect([1,1,1])
+    # #plt.axis('off')
+
+    # ax.add_collection3d(polys)
+    # #plt.show()
+    # plt.savefig('poliedro_'+str(i+1)+'.png')
+    
     return medicoes,r
     
 #medicoes,r = measurements(1)
@@ -96,6 +138,9 @@ def strategies_LHS(m,k):
 
 def SDP_LHS(m,k,rho,rho_sep,eta,detp,medicoes):
 
+    t = time.process_time()
+    print('Entrando no SDP')
+
     P = pic.Problem()
 
     q = pic.RealVariable('q')
@@ -111,7 +156,9 @@ def SDP_LHS(m,k,rho,rho_sep,eta,detp,medicoes):
     est_det = [pic.sum([sigma[j]*detp[j][i] for j in range(k**m)]) for i in range(k*m)]
 
     est = [(np.kron(medicoes[i],np.eye(2)))*chi for i in range(k*m)]
-    
+
+    t_1 = time.process_time() - t
+    print('Definidas as variaveis',t_1)
     P.add_constraint(q<=1)
 
     P.add_constraint(q>=0)
@@ -122,24 +169,47 @@ def SDP_LHS(m,k,rho,rho_sep,eta,detp,medicoes):
 
     P.add_list_of_constraints([pic.partial_trace(est[i],subsystems=0,dimensions=(2,2))==est_det[i] for i in range(k*m)])
 
+    t_2 = time.process_time() - t_1
+    print('Definidas as restrições',t_2)
     P.set_objective('max',q)
 
     solution = P.solve()
+    t_3 = time.process_time() - t_2
+    print('Solucionado!',t_3)
 
     return P, solution, q, chi, sigma, rho_q, rho_eta, est_det, est
 
-rho,rho_sep = states()
-medicoes,r = measurements(1)
-detp = strategies_LHS(3,2)
 
-P,solution,q,chi,sigma_lambda,rho_q,rho_eta,est_det,est = SDP_LHS(3,2,rho,rho_sep,r,detp,medicoes)
-print(P)
-print(solution)
-#print(solution.primals)
-print(q)
-#print(chi)
-#print(sigma_lambda)
-#print(rho_q)
-#print(rho_eta)
-#print(est_det)
-#print(est)
+#Aqui chamamos as funções!
+rho,rho_sep = states()
+
+for i in range(3):
+    print('Entrando no ciclo ',i+1)
+    medicoes,r = measurements(i+1)
+    m_k = medicoes.shape
+    print('Número de vértices:')
+    print(m_k[0])
+    print('Raio inscrito:')
+    print(r)
+    k = 2
+    m = int(m_k[0]/k)
+    detp = strategies_LHS(m,k)
+
+    P,solution,q,chi,sigma_lambda,rho_q,rho_eta,est_det,est = SDP_LHS(m,k,rho,rho_sep,r,detp,medicoes)
+    print(P)
+    print(solution)
+    #print(solution.primals)
+    print('q:',q)
+    # print('chi:')
+    # print(chi)
+    # print('sigma_lambda:')
+    # print(sigma_lambda)
+    # print('rho_q:')
+    # print(rho_q)
+    # print('rho_eta:')
+    # print(rho_eta)
+    # print('est_det:')
+    # print(est_det)
+    # print('est:')
+    # print(est)
+    print('Ciclo ',i+1,' finalizado.')
