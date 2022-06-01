@@ -21,7 +21,8 @@ def states():
     rho = psi@np.transpose(psi)
     #Definir matriz densidade I/4
     rho_sep = (np.eye(4))/4
-    return rho, rho_sep
+    rho_00  = ket_00@np.transpose(ket_00)
+    return rho, rho_sep , rho_00
 
 #rho,rho_sep = states()
 #print(rho)
@@ -50,12 +51,38 @@ def measurements(n):
 
     vert_t = np.concatenate((vert_s,vert_t))
 
+    vert_q = np.array([[1/2,(np.sqrt(3))/2,0],[-1/2,-(np.sqrt(3))/2,0],
+    [(np.sqrt(3))/2,1/2,0],[-(np.sqrt(3))/2,-1/2,0],
+    [0,1/2,(np.sqrt(3))/2],[0,-1/2,-(np.sqrt(3))/2],
+    [0,(np.sqrt(3))/2,1/2],[0,-(np.sqrt(3))/2,-1/2],
+    [1/2,0,(np.sqrt(3))/2],[-1/2,0,-(np.sqrt(3))/2],
+    [(np.sqrt(3))/2,0,1/2],[-(np.sqrt(3))/2,0,-1/2],
+    [(np.sqrt(3))/4,1/4,(np.sqrt(3))/2],[-(np.sqrt(3))/4,-1/4,-(np.sqrt(3))/2],
+    [1/4,(np.sqrt(3))/4,(np.sqrt(3))/2],[-1/4,-(np.sqrt(3))/4,-(np.sqrt(3))/2],
+    [3/4,(np.sqrt(3))/4,1/2],[-3/4,-(np.sqrt(3))/4,-1/2],
+    [(np.sqrt(3))/4,3/4,1/2],[-(np.sqrt(3))/4,-3/4,1/2],
+    [-(np.sqrt(3))/4,1/4,(np.sqrt(3))/2],[(np.sqrt(3))/4,-1/4,-(np.sqrt(3))/2],
+    [-1/4,(np.sqrt(3))/4,(np.sqrt(3))/2],[1/4,-(np.sqrt(3))/4,-(np.sqrt(3))/2],
+    [-3/4,(np.sqrt(3))/4,1/2],[3/4,-(np.sqrt(3))/4,-1/2],
+    [-(np.sqrt(3))/4,3/4,1/2],[(np.sqrt(3))/4,-3/4,-1/2],
+    [-1/2,(np.sqrt(3))/2,0],[1/2,-(np.sqrt(3))/2,0],
+    [-(np.sqrt(3))/2,1/2,0],[(np.sqrt(3))/2,-1/2,0],
+    [0,-1/2,(np.sqrt(3))/2],[0,1/2,-(np.sqrt(3))/2],
+    [0,-(np.sqrt(3))/2,1/2],[0,(np.sqrt(3))/2,-1/2],
+    [1/2,0,-(np.sqrt(3))/2],[-1/2,0,(np.sqrt(3))/2],
+    [(np.sqrt(3))/2,0,-1/2],[-(np.sqrt(3))/2,0,1/2]
+    ])
+
+    vert_q = np.concatenate((vert_t,vert_q))
+
     if n == 1:
         vert = vert_p
     elif n == 2:
         vert = vert_s
     elif n == 3:
         vert = vert_t
+    elif n == 4:
+        vert = vert_q
 
     m_k = vert.shape[0]
     medicoes = np.zeros([m_k,2,2], dtype=complex)
@@ -70,9 +97,9 @@ def measurements(n):
     
         medicoes[i] = [[med_00,med_01],[med_10,med_11]]
 
-    for i in range(int(m_k/2)):
-        print("Soma")
-        print(medicoes[2*i]+medicoes[2*i+1])
+    # for i in range(int(m_k/2)):
+    #     print("Soma")
+    #     print(medicoes[2*i]+medicoes[2*i+1])
     
     #Poliedro
     hull = ConvexHull(vert)
@@ -113,13 +140,13 @@ def measurements(n):
     #plt.axis('off')
 
     ax.add_collection3d(polys)
-    plt.show()
-    # plt.savefig('poliedro_'+str(i+1)+'.png')
+    #plt.show()
+    plt.savefig('poliedro_'+str(i+1)+'.png')
     
     return medicoes,r
     
-#medicoes,r = measurements(2)
-#print(medicoes)
+#medicoes,r = measurements(4)
+#print(medicoes.shape)
 #print(r)
 
 def strategies_LHS(m,k):
@@ -167,10 +194,6 @@ def SDP_LHS(m,k,rho,rho_sep,eta,detp,medicoes):
 
     est_det = [pic.sum([sigma[j]*detp[j,i] for j in range(k**m)]) for i in range(k*m)]
 
-    # for i in range(k*m):
-    #     print('printando est_det[',i,']:',est_det[i])
-    #     print('printando detp[',i,']:',detp[:,i])
-
     est = [(np.kron(medicoes[i],np.eye(2)))*chi for i in range(k*m)]
 
     t_1 = time.process_time() - t
@@ -197,12 +220,11 @@ def SDP_LHS(m,k,rho,rho_sep,eta,detp,medicoes):
 
 
 #Aqui chamamos as funções!
-rho,rho_sep = states()
+rho,rho_sep, rho_00 = states()
 
-for i in range(3):
+for i in range(4):
     print('Entrando no ciclo ',i+1)
     medicoes,r = measurements(i+1)
-    print(medicoes)
     m_k = medicoes.shape
     print('Número de vértices:')
     print(m_k[0])
@@ -214,8 +236,8 @@ for i in range(3):
 
     P,solution,q,chi,sigma_lambda,rho_q,rho_eta,est_det,est = SDP_LHS(m,k,rho,rho_sep,r,detp,medicoes)
     print(P)
-    print(solution)
-    #print(solution.primals)
+#     print(solution)
+#     #print(solution.primals)
     print('q:',q)
 #     print('chi:')
 #     print(chi)
