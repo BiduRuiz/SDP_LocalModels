@@ -85,9 +85,9 @@ def measurements(n):
     
         medicoes[i] = [[med_00,med_01],[med_10,med_11]]
 
-    for i in range(int(m_k/2)):
-        print("Soma")
-        print(medicoes[2*i]+medicoes[2*i+1])
+    # for i in range(int(m_k/2)):
+    #     print("Soma")
+    #     print(medicoes[2*i]+medicoes[2*i+1])
     
     #Poliedro
     hull = ConvexHull(vert)
@@ -159,14 +159,28 @@ def strategies_LHS(m,k):
 
     return detp
 
-#detp = strategies_LHS(3,2)
-#print(detp)
-#print(detp[0,0])
+# detp = strategies_LHS(3,2)
+# print(detp.shape)
+# print(detp)
 
-def SDP_LHS(m,k,rho,rho_sep,eta,detp,medicoes):
+def SDP_LHS(m_anterior,detp_excluidos,m,k,rho,rho_sep,eta,medicoes):
 
     t = time.process_time()
     print('Entrando no SDP')
+
+    if len(detp_excluidos) == 0:
+        detp = strategies_LHS(m,k)
+    else:
+        detp_anterior = strategies_LHS(m_anterior,k)
+        detp_otimizado = np.delete(detp_anterior,detp_excluidos,axis=0)
+
+        detp_novo = strategies_LHS(m-m_anterior,k)
+
+        detp = np.zeros((detp_novo.shape[0]*detp_otimizado.shape[0],detp_novo.shape[1]+detp_otimizado.shape[1]))
+
+        for j in range(detp_otimizado.shape[0]):
+            for i in range(detp_novo.shape[0]):
+                detp[j*(detp_novo.shape[0])+i] = np.append(detp_otimizado[j],detp_novo[i])
 
     P = pic.Problem()
 
@@ -174,13 +188,13 @@ def SDP_LHS(m,k,rho,rho_sep,eta,detp,medicoes):
 
     chi = pic.HermitianVariable('chi',(4,4))
 
-    sigma = [pic.HermitianVariable('Sigma_lambda[{}]'.format(i),(2,2)) for i in range(k**m)]
+    sigma = [pic.HermitianVariable('Sigma_lambda[{}]'.format(i),(2,2)) for i in range(len(detp))]
 
     rho_q = rho*q+(1-q)*rho_sep
 
     rho_eta = eta*chi+(1-eta)*(pic.partial_trace(rho_sep,subsystems=1,dimensions=(2,2)))@(pic.partial_trace(chi,subsystems=0,dimensions=(2,2)))
 
-    est_det = [pic.sum([sigma[j]*detp[j,i] for j in range(k**m)]) for i in range(k*m)]
+    est_det = [pic.sum([sigma[j]*detp[j,i] for j in range(len(detp))]) for i in range(k*m)]
 
     est = [(np.kron(medicoes[i],np.eye(2)))*chi for i in range(k*m)]
 
@@ -190,7 +204,7 @@ def SDP_LHS(m,k,rho,rho_sep,eta,detp,medicoes):
 
     P.add_constraint(q>=0)
 
-    P.add_list_of_constraints([sigma[i]>>0 for i in range(k**m)]) 
+    P.add_list_of_constraints([sigma[i]>>0 for i in range(len(detp))]) 
 
     P.add_constraint(rho_q == rho_eta)
 
@@ -204,13 +218,35 @@ def SDP_LHS(m,k,rho,rho_sep,eta,detp,medicoes):
     t_3 = time.process_time() - t_2
     print('Solucionado!',t_3)
 
-    return P, solution, q, chi, sigma, rho_q, rho_eta, est_det, est
+    p_lambda = np.zeros(len(sigma))
+
+    detp_exc = np.array([],dtype=int)
+
+    for i in range(len(sigma)):
+        p_lambda[i] = np.trace(sigma[i])
+        if p_lambda[i] <= 10**(-9):
+            detp_exc = np.append(detp_exc,i)
+
+    # print(p_lambda)
+    # print(detp_exc)
+
+    if len(detp_exc) == 0:
+        detp_exc = np.array([])
+    else:
+        print('detp_exc:',detp_exc.shape)
+
+    print('detp:',detp.shape)
+
+    return P, solution, q, chi, sigma, rho_q, rho_eta, est_det, est, detp_exc, m
 
 
 #Aqui chamamos as funções!
 rho,rho_sep, rho_00 = states()
 
-for i in range(1):
+m_anterior = 0
+detp_excluidos = np.array([])
+
+for i in range(3):
     print('Entrando no ciclo ',i+1)
     medicoes,r = measurements(i+1)
     m_k = medicoes.shape
@@ -220,23 +256,24 @@ for i in range(1):
     print(r)
     k = 2
     m = int(m_k[0]/k)
-    detp = strategies_LHS(m,k)
 
-    P,solution,q,chi,sigma_lambda,rho_q,rho_eta,est_det,est = SDP_LHS(m,k,rho,rho_00,r,detp,medicoes)
-    print(P)
+    P,solution,q,chi,sigma_lambda,rho_q,rho_eta,est_det,est,detp_exc,m_ant = SDP_LHS(m_anterior,detp_excluidos,m,k,rho,rho_sep,r,medicoes)
+    detp_excluidos = detp_exc
+    m_anterior = m
+    #print(P)
 #     print(solution)
 #     #print(solution.primals)
     print('q:',q)
-    # print('chi:')
-    # print(chi)
-    # print('sigma_lambda:')
-    # print(sigma_lambda)
-    # print('rho_q:')
-    # print(rho_q)
-    # print('rho_eta:')
-    # print(rho_eta)
-    # print('est_det:')
-    # print(est_det)
-    # print('est:')
-    # print(est)
-    print('Ciclo ',i+1,' finalizado.')
+#     print('chi:')
+#     print(chi)
+#     print('sigma_lambda:')
+#     print(sigma_lambda)
+#     print('rho_q:')
+#     print(rho_q)
+#     print('rho_eta:')
+#     print(rho_eta)
+#     print('est_det:')
+#     print(est_det)
+#     print('est:')
+#     print(est)
+#     print('Ciclo ',i+1,' finalizado.')

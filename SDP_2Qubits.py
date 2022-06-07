@@ -53,11 +53,23 @@ def measurements(n):
 
     vert_q = np.array([[1/2,(np.sqrt(3))/2,0],[-1/2,-(np.sqrt(3))/2,0],
     [(np.sqrt(3))/2,1/2,0],[-(np.sqrt(3))/2,-1/2,0],
+    [0,1/2,(np.sqrt(3))/2],[0,-1/2,-(np.sqrt(3))/2],
     [0,(np.sqrt(3))/2,1/2],[0,-(np.sqrt(3))/2,-1/2],
+    [1/2,0,(np.sqrt(3))/2],[-1/2,0,-(np.sqrt(3))/2],
     [(np.sqrt(3))/2,0,1/2],[-(np.sqrt(3))/2,0,-1/2],
+    [(np.sqrt(3))/4,1/4,(np.sqrt(3))/2],[-(np.sqrt(3))/4,-1/4,-(np.sqrt(3))/2],
+    [1/4,(np.sqrt(3))/4,(np.sqrt(3))/2],[-1/4,-(np.sqrt(3))/4,-(np.sqrt(3))/2],
+    [3/4,(np.sqrt(3))/4,1/2],[-3/4,-(np.sqrt(3))/4,-1/2],
+    [(np.sqrt(3))/4,3/4,1/2],[-(np.sqrt(3))/4,-3/4,1/2],
+    [-(np.sqrt(3))/4,1/4,(np.sqrt(3))/2],[(np.sqrt(3))/4,-1/4,-(np.sqrt(3))/2],
+    [-1/4,(np.sqrt(3))/4,(np.sqrt(3))/2],[1/4,-(np.sqrt(3))/4,-(np.sqrt(3))/2],
+    [-3/4,(np.sqrt(3))/4,1/2],[3/4,-(np.sqrt(3))/4,-1/2],
+    [-(np.sqrt(3))/4,3/4,1/2],[(np.sqrt(3))/4,-3/4,-1/2],
     [-1/2,(np.sqrt(3))/2,0],[1/2,-(np.sqrt(3))/2,0],
     [-(np.sqrt(3))/2,1/2,0],[(np.sqrt(3))/2,-1/2,0],
+    [0,-1/2,(np.sqrt(3))/2],[0,1/2,-(np.sqrt(3))/2],
     [0,-(np.sqrt(3))/2,1/2],[0,(np.sqrt(3))/2,-1/2],
+    [1/2,0,-(np.sqrt(3))/2],[-1/2,0,(np.sqrt(3))/2],
     [(np.sqrt(3))/2,0,-1/2],[-(np.sqrt(3))/2,0,1/2]
     ])
 
@@ -85,9 +97,9 @@ def measurements(n):
     
         medicoes[i] = [[med_00,med_01],[med_10,med_11]]
 
-    for i in range(int(m_k/2)):
-        print("Soma")
-        print(medicoes[2*i]+medicoes[2*i+1])
+    # for i in range(int(m_k/2)):
+    #     print("Soma")
+    #     print(medicoes[2*i]+medicoes[2*i+1])
     
     #Poliedro
     hull = ConvexHull(vert)
@@ -96,46 +108,46 @@ def measurements(n):
 
     #Plota o poliedro recebendo apenas os vertices da forma: [[x,y,z],[x,y,z],...]
 
-    # polys = Poly3DCollection([hull.points[simplex] for simplex in hull.simplices])
+    #polys = Poly3DCollection([hull.points[simplex] for simplex in hull.simplices])
 
-    # polys.set_edgecolor('deeppink')
-    # polys.set_linewidth(.8)
-    # polys.set_facecolor('hotpink')
-    # polys.set_alpha(.25)
+    #polys.set_edgecolor('deeppink')
+    #polys.set_linewidth(.8)
+    #polys.set_facecolor('hotpink')
+    #polys.set_alpha(.25)
     
-    # #Construindo a esfera interna
-    # u, v = np.mgrid[0:2*np.pi:50j, 0:np.pi:50j]
-    # x = r*np.cos(u)*np.sin(v)
-    # y = r*np.sin(u)*np.sin(v)
-    # z = r*np.cos(v)
+    #Construindo a esfera interna
+    #u, v = np.mgrid[0:2*np.pi:50j, 0:np.pi:50j]
+    #x = r*np.cos(u)*np.sin(v)
+    #y = r*np.sin(u)*np.sin(v)
+    #z = r*np.cos(v)
     
-    # #Construindo a esfera unitária
-    # x_uni = np.cos(u)*np.sin(v)
-    # y_uni = np.sin(u)*np.sin(v)
-    # z_uni = np.cos(v)
+    #Construindo a esfera unitária
+    #x_uni = np.cos(u)*np.sin(v)
+    #y_uni = np.sin(u)*np.sin(v)
+    #z_uni = np.cos(v)
     
-    # ax = Axes3D(plt.figure())
+    #ax = Axes3D(plt.figure())
     
-    # #Plot insphere
-    # ax.plot_surface(x,y,z,color='lime',alpha=.35)
-    # #Plot unitary sphere
-    # ax.plot_surface(x_uni,y_uni,z_uni,color='lightgray',alpha=.15)
-    # #Plot polyhedron
-    # ax.set_xlim3d(-1,1)
-    # ax.set_ylim3d(-1,1)
-    # ax.set_zlim3d(-1,1)
-    # ax.set_box_aspect([1,1,1])
-    # #plt.axis('off')
+    #Plot insphere
+    #ax.plot_surface(x,y,z,color='lime',alpha=.35)
+    #Plot unitary sphere
+    #ax.plot_surface(x_uni,y_uni,z_uni,color='lightgray',alpha=.15)
+    #Plot polyhedron
+    #ax.set_xlim3d(-1,1)
+    #ax.set_ylim3d(-1,1)
+    #ax.set_zlim3d(-1,1)
+    #ax.set_box_aspect([1,1,1])
+    #plt.axis('off')
 
-    # ax.add_collection3d(polys)
-    # #plt.show()
-    # plt.savefig('poliedro_'+str(m_k)+'.png')
+    #ax.add_collection3d(polys)
+    #plt.show()
+    #plt.savefig('poliedro_'+str(i+1)+'.png')
     
     return medicoes,r
     
-# medicoes,r = measurements(4)
-# print(medicoes.shape)
-# print(r)
+#medicoes,r = measurements(4)
+#print(medicoes.shape)
+#print(r)
 
 def strategies_LHS(m,k):
 
@@ -165,13 +177,17 @@ def strategies_LHS(m,k):
 
 def SDP_LHS(m,k,rho,rho_sep,eta,detp,medicoes):
 
+    rho_lhs = [(i*0.044)*rho+(1-i*0.044)*rho_sep for i in range(10)]
+    #print(rho_lhs)
     t = time.process_time()
     print('Entrando no SDP')
 
     P = pic.Problem()
 
     q = pic.RealVariable('q')
-
+    
+    p_k = [pic.RealVariable('p[{}]'.format(i),(1,1)) for i in range(10)]
+    
     chi = pic.HermitianVariable('chi',(4,4))
 
     sigma = [pic.HermitianVariable('Sigma_lambda[{}]'.format(i),(2,2)) for i in range(k**m)]
@@ -179,6 +195,8 @@ def SDP_LHS(m,k,rho,rho_sep,eta,detp,medicoes):
     rho_q = rho*q+(1-q)*rho_sep
 
     rho_eta = eta*chi+(1-eta)*(pic.partial_trace(rho_sep,subsystems=1,dimensions=(2,2)))@(pic.partial_trace(chi,subsystems=0,dimensions=(2,2)))
+    
+    sum_lhs = pic.sum([p_k[i]*rho_lhs[i] for i in range(10)])
 
     est_det = [pic.sum([sigma[j]*detp[j,i] for j in range(k**m)]) for i in range(k*m)]
 
@@ -191,8 +209,14 @@ def SDP_LHS(m,k,rho,rho_sep,eta,detp,medicoes):
     P.add_constraint(q>=0)
 
     P.add_list_of_constraints([sigma[i]>>0 for i in range(k**m)]) 
+    
+    P.add_list_of_constraints([p_k[i]>=0 for i in range(10)])
 
-    P.add_constraint(rho_q == rho_eta)
+    P.add_constraint(rho_q - rho_eta - sum_lhs>>0)
+    
+    P.add_constraint(pic.partial_transpose(rho_q - rho_eta - sum_lhs,subsystems=1,dimensions=(2,2))>>0)
+    
+    P.add_constraint(pic.trace(chi)+pic.sum([p_k[i]*np.trace(rho_lhs) for i in range(10)])>=0)
 
     P.add_list_of_constraints([pic.partial_trace(est[i],subsystems=0,dimensions=(2,2))==est_det[i] for i in range(k*m)])
 
@@ -210,7 +234,7 @@ def SDP_LHS(m,k,rho,rho_sep,eta,detp,medicoes):
 #Aqui chamamos as funções!
 rho,rho_sep, rho_00 = states()
 
-for i in range(1):
+for i in range(3):
     print('Entrando no ciclo ',i+1)
     medicoes,r = measurements(i+1)
     m_k = medicoes.shape
@@ -222,21 +246,7 @@ for i in range(1):
     m = int(m_k[0]/k)
     detp = strategies_LHS(m,k)
 
-    P,solution,q,chi,sigma_lambda,rho_q,rho_eta,est_det,est = SDP_LHS(m,k,rho,rho_00,r,detp,medicoes)
+    P,solution,q,chi,sigma_lambda,rho_q,rho_eta,est_det,est = SDP_LHS(m,k,rho,rho_sep,r,detp,medicoes)
     print(P)
-#     print(solution)
-#     #print(solution.primals)
     print('q:',q)
-    # print('chi:')
-    # print(chi)
-    # print('sigma_lambda:')
-    # print(sigma_lambda)
-    # print('rho_q:')
-    # print(rho_q)
-    # print('rho_eta:')
-    # print(rho_eta)
-    # print('est_det:')
-    # print(est_det)
-    # print('est:')
-    # print(est)
     print('Ciclo ',i+1,' finalizado.')

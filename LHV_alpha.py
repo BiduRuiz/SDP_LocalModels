@@ -174,8 +174,8 @@ def SDP_LHV(k_A,m_A,k_B,m_B,rho,rho_sep,eta_A,eta_B,detp,mea_A,mea_B):
 
     rho_eta = eta_A*eta_B*chi+eta_A*(1-eta_B)*pic.partial_trace(chi,subsystems=1,dimensions=(2,2))@(pic.partial_trace(rho_sep,subsystems=0, dimensions=(2,2))) + eta_B*(1-eta_A)*pic.partial_trace(rho_sep,subsystems=1,dimensions=(2,2))@(pic.partial_trace(chi,subsystems=0,dimensions=(2,2))) + (1-eta_A)*(1-eta_B)*pic.partial_trace(rho_sep,subsystems=1,dimensions=(2,2))@(pic.partial_trace(rho_sep,subsystems=0,dimensions=(2,2)))
 
-    print(detp)
-    print(detp[:,0])
+    #print(detp)
+    #print(detp[:,0])
 
     est_det = [pic.sum(detp[j,i*k]*sigma[j]for j in range((k_A**m_A)*(k_B**m_B))) for i in range(k_A*m_A) for k in range(k_B*m_B)]
 
@@ -201,23 +201,23 @@ def SDP_LHV(k_A,m_A,k_B,m_B,rho,rho_sep,eta_A,eta_B,detp,mea_A,mea_B):
 
 rho, rho_sep = WernerClass()
 
-medicoes_A, eta_A =  measurements(1)
-medicoes_B, eta_B =  measurements(1)
-k_A = 2
-k_B = 2
-m_A = int(medicoes_A.shape[0]/2)
-m_B = int(medicoes_B.shape[0]/2)
-print(m_A,m_B)
-det_est = strategies_LHV(m_A,k_A,m_B,k_B)
+for i in range(2):
+    medicoes_A, eta_A =  measurements(i+1)
+    medicoes_B, eta_B =  measurements(i+1)
+    k_A = 2
+    k_B = 2
+    m_A = int(medicoes_A.shape[0]/2)
+    m_B = int(medicoes_B.shape[0]/2)
+    det_est = strategies_LHV(m_A,k_A,m_B,k_B)
 
-#Aplicar SDP
+    #Aplicar SDP
 
-p_lambda, q, chi, solution, prob = SDP_LHV(k_A,m_A,k_B,m_B,rho,rho_sep,eta_A,eta_B,det_est,medicoes_A,medicoes_B)
+    p_lambda, q, chi, solution, prob = SDP_LHV(k_A,m_A,k_B,m_B,rho,rho_sep,eta_A,eta_B,det_est,medicoes_A,medicoes_B)
 
-print('Problema')
-print(prob)
-print('Solução do problema')
-#print('p_lambda',p_lambda)
-print('q', q)
-#print('q.shape',q.shape)
-#print('chi',chi)
+    print('Problema')
+    print(prob)
+    print('Solução do problema')
+    #print('p_lambda',p_lambda)
+    print('q', q)
+    #print('q.shape',q.shape)
+    #print('chi',chi)
