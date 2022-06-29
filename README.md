@@ -14,7 +14,7 @@ The target state is the class of two-qubit Werner states
 
 We are starting with 3 measurements, each with 2 results.
 
-The files are: SDP_Completo.py which has all the funcions already inside and it is way more clean, AND IS WORKING! And LHV_alpha.py which is not working yet, just ignore it for now...
+The files are: SDP_Completo.py which has all the funcions already inside and it is way more clean, AND IS WORKING! For more commented and documented code, view the Jupyter Notebook LocalModels.ipynb. And LHV_alpha.py which is not working yet, just ignore it for now...
 
 ## Dependencies
 - picos
