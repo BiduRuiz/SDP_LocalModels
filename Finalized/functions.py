@@ -48,10 +48,10 @@ def Ent_cert(rho):
     w, v = LA.eig(rho_TA)
     # PPT Criterion: Are all eigenvalues >=0?
     if all(i >= 0 for i in w):
-        print('Yes: separable state.')
+        # print('Yes: separable state.')
         ppt = 0
     else:
-        print('No: entangled state.')
+        # print('No: entangled state.')
         ppt = 1
     return w,v,ppt
 
@@ -116,9 +116,9 @@ def measurements(n,PLOT=False):
         medicoes[i] = [[med_00,med_01],[med_10,med_11]]
 
     #Verify that the sum of each dichotomous measurement is the identity
-    for i in range(int(m_k/2)):
-        print("Sum")
-        print(medicoes[2*i]+medicoes[2*i+1])
+    #for i in range(int(m_k/2)):
+        #print("Sum")
+        #print(medicoes[2*i]+medicoes[2*i+1])
     
     #Construct the polyhedron
     hull = ConvexHull(vert)
@@ -145,8 +145,9 @@ def measurements(n,PLOT=False):
         y_uni = np.sin(u)*np.sin(v)
         z_uni = np.cos(v)
         
-        ax = Axes3D(plt.figure())
-        
+        fig = plt.figure()
+        ax = fig.add_subplot(111,projection="3d")
+        #ax = Axes3D(plt.figure())
         #Plot insphere
         ax.plot_surface(x,y,z,color='lime',alpha=.35)
         #Plot Bloch sphere
