@@ -1,0 +1,55 @@
+For n = 1
+Separable states: 0(0.0%)
+Non-local Entangled states: 1(100.0%)
+Local entangled states: 0(0.0%)
+------------------------------------------------------------------------------------
+For n = 10
+Separable states: 0(0.0%)
+Non-local Entangled states: 9(90.0%)
+Local entangled states: 1(10.0%)
+------------------------------------------------------------------------------------
+For n = 50
+Separable states: 0(0.0%)
+Non-local Entangled states: 49(98.0%)
+Local entangled states: 1(2.0%)
+------------------------------------------------------------------------------------
+For n = 100
+Separable states: 2(2.0%)
+Non-local Entangled states: 96(96.0%)
+Local entangled states: 2(2.0%)
+------------------------------------------------------------------------------------
+For n = 500
+Separable states: 7(1.4%)
+Non-local Entangled states: 480(96.0%)
+Local entangled states: 13(2.6%)
+------------------------------------------------------------------------------------
+For n = 1000
+Separable states: 30(3.0%)
+Non-local Entangled states: 931(93.1%)
+Local entangled states: 39(3.9%)
+------------------------------------------------------------------------------------
+For n = 5000
+Separable states: 118(2.36%)
+Non-local Entangled states: 4677(93.54%)
+Local entangled states: 205(4.1%)
+------------------------------------------------------------------------------------
+For n = 10000
+Separable states: 278(2.78%)
+Non-local Entangled states: 9402(94.02%)
+Local entangled states: 320(3.2%)
+------------------------------------------------------------------------------------
+For n = 50000
+Separable states: 1362(2.724%)
+Non-local Entangled states: 46968(93.936%)
+Local entangled states: 1670(3.34%)
+------------------------------------------------------------------------------------
+For n = 100000
+Separable states: 2627(2.627%)
+Non-local Entangled states: 94014(94.014%)
+Local entangled states: 3359(3.359%)
+------------------------------------------------------------------------------------
+For n = 1000000
+Separable states: 27111(2.7111%)
+Non-local Entangled states: 939273(93.9273%)
+Local entangled states: 33616(3.3616%)
+------------------------------------------------------------------------------------
