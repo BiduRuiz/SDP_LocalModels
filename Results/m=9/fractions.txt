@@ -1,0 +1,5 @@
+For n = 1500 Total states with alpha = 1 525.0 Total entangled states 1128.0
+Separable states: 259(17.266666666666666%)
+Non-local Entangled states: 0(0.0%)
+Local entangled states: 266(17.733333333333334%)(23.581560283687942%)
+------------------------------------------------------------------------------------

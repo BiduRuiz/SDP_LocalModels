@@ -13,12 +13,9 @@ from matplotlib import pyplot as plt
 # First block: Functions to create and certify the states
 # Generation of the random matrix from the Ginibre ensemble
 '''A complex matrix with elements having real and complex part distributed with the normal distribution'''
-def G_matrix(m,n):
-    # Matrix G of size m x n
-    G = np.zeros((m,n),dtype=np.complex_)
-    for k in range(m):
-        for l in range(n):
-            G[k,l] = random()+random()*1j
+def G_matrix(n,m):
+    # Matrix G of size n x m
+    G = (np.random.randn(n, m) + 1j * np.random.randn(n, m)) / np.sqrt(2)
     return G
 
 # Generation a random mixed density matrix (Bures metric)
@@ -27,8 +24,20 @@ def rho_mixed(n):
     U = unitary_group.rvs(n)
     # Create random Ginibre matrix
     G = G_matrix(n,n)
+    # Create identity matrix
+    I = np.eye(4)
     # Construct density matrix
-    rho = (1+U)*G*(G.conjugate().T)*(1+U.conjugate().T)
+    rho = (I+U)@G@(G.conjugate().T)@(I+U.conjugate().T)
+    # Normalize density matrix
+    rho = rho/(rho.trace())
+    return rho
+
+# Generation a random mixed density matrix (Hilbert-Schmidt metric)
+def rho_mixed_HS(n):
+    # Create random Ginibre matrix
+    G = G_matrix(n,n)
+    # Construct density matrix
+    rho = G@(G.conjugate().T)
     # Normalize density matrix
     rho = rho/(rho.trace())
     return rho
@@ -129,9 +138,10 @@ def measurements(n,PLOT=False):
     if PLOT == True:
         polys = Poly3DCollection([hull.points[simplex] for simplex in hull.simplices])
 
-        polys.set_edgecolor('deeppink')
+        # Good choice of colors: 'deeppink' and 'hotpink'
+        polys.set_edgecolor('blue')
         polys.set_linewidth(.8)
-        polys.set_facecolor('hotpink')
+        polys.set_facecolor('azure')
         polys.set_alpha(.25)
         
         #Build the insphere
@@ -148,20 +158,25 @@ def measurements(n,PLOT=False):
         fig = plt.figure()
         ax = fig.add_subplot(111,projection="3d")
         #ax = Axes3D(plt.figure())
-        #Plot insphere
-        ax.plot_surface(x,y,z,color='lime',alpha=.35)
         #Plot Bloch sphere
         ax.plot_surface(x_uni,y_uni,z_uni,color='lightgray',alpha=.15)
+        #Plot insphere
+        # Good choice of color: 'lime', alpha=.35
+        ax.plot_surface(x,y,z,color='yellow',alpha=.95)
         #Plot polyhedron
         ax.set_xlim3d(-1,1)
         ax.set_ylim3d(-1,1)
         ax.set_zlim3d(-1,1)
         ax.set_box_aspect([1,1,1])
+        ax.set_xticks([-1,0,1])
+        ax.set_yticks([-1,0,1])
+        ax.set_zticks([-1,0,1])
+        ax.view_init(15,75)
         #plt.axis('off')
 
         ax.add_collection3d(polys)
         #plt.show()
-        plt.savefig('poliedro_'+str(m_k)+'.png')
+        plt.savefig('poliedro_'+str(m_k)+'.png', transparent=True,dpi=300)
     
     #Return the measurements and the insphere radius
     return medicoes,r

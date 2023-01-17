@@ -1,16 +1,18 @@
 import functions as fc
 import numpy as np
+#from toqito.random import random_density_matrix
 
 # Creating n states, with dimension d
-n = 50000
+n = 1
 d = 4
 
 # Creating the separable state
 rho_sep = (np.eye(4))/4
 
 # Creating m measurements, each with 2 results
-medicoes, eta = fc.measurements(1,PLOT=True)
+medicoes, eta = fc.measurements(3,PLOT=True)
 m = int(medicoes.shape[0]/2)
+print(eta)
 
 # Creating the deterministic strategies
 detp = fc.strategies_LHS(m,2)
@@ -25,7 +27,18 @@ f2 = open("states_"+str(n)+".txt", "w")
 f3 = open("info_"+str(n)+".txt","w")
 
 for i in range(n):
+
+    # Using the functions created (Bures and Haar)
+
     rho = fc.rho_mixed(d)
+
+    #rho = fc.rho_mixed_HS(d)
+
+    # Using the toqito package to generate the states:
+
+    #rho = random_density_matrix(d, distance_metric="haar")    
+
+    #rho = random_density_matrix(d, distance_metric="bures")  
 
     f2.write(str(rho)+"\n")
     
@@ -41,26 +54,19 @@ for i in range(n):
         s = "No: entangled state.\n"
 
     f1.write(s)
-    f3.write(str(i)+" "+str(ppt))
+    f3.write(str(i)+" "+str(ppt)+"\n")
 
-    P,solution,q = fc.SDP_LHS(m,2,rho,rho_sep,eta,detp,medicoes)
-
-    rho_q = rho*q+(1-q)*rho_sep
-
-    output_message = ("Optimal value from SDP\n",str(q),"\nResulting state\n",str(rho_q),"\nIs the state separable?\n")
-    
-    f1.writelines(output_message)
-
-    w,v,ppt = fc.Ent_cert(rho_q)
-
-    if ppt == 0:
-        s = "Yes: separable state.\n"
-    else:
-        s = "No: entangled state.\n"
-
-    f1.write(s)
-    f3.write(" "+str(q)+" "+str(ppt)+"\n")
-
+    #P,solution,q = fc.SDP_LHS(m,2,rho,rho_sep,eta,detp,medicoes)
+    #rho_q = rho*q+(1-q)*rho_sep
+    #output_message = ("Optimal value from SDP\n",str(q),"\nResulting state\n",str(rho_q),"\nIs the state separable?\n")
+    #f1.writelines(output_message)
+    #w,v,ppt = fc.Ent_cert(rho_q)
+    #if ppt == 0:
+    #    s = "Yes: separable state.\n"
+    #else:
+    #    s = "No: entangled state.\n"
+    #f1.write(s)
+    #f3.write(" "+str(q)+" "+str(ppt)+"\n")
 
 # Closing the files
 f1.close()
