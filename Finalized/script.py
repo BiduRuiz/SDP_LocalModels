@@ -10,7 +10,7 @@ d = 4
 rho_sep = (np.eye(4))/4
 
 # Creating m measurements, each with 2 results
-medicoes, eta = fc.measurements(3,PLOT=True)
+medicoes, eta = fc.measurements(1,PLOT=True)
 m = int(medicoes.shape[0]/2)
 print(eta)
 
@@ -56,17 +56,20 @@ for i in range(n):
     f1.write(s)
     f3.write(str(i)+" "+str(ppt)+"\n")
 
-    #P,solution,q = fc.SDP_LHS(m,2,rho,rho_sep,eta,detp,medicoes)
-    #rho_q = rho*q+(1-q)*rho_sep
-    #output_message = ("Optimal value from SDP\n",str(q),"\nResulting state\n",str(rho_q),"\nIs the state separable?\n")
-    #f1.writelines(output_message)
-    #w,v,ppt = fc.Ent_cert(rho_q)
-    #if ppt == 0:
-    #    s = "Yes: separable state.\n"
-    #else:
-    #    s = "No: entangled state.\n"
-    #f1.write(s)
-    #f3.write(" "+str(q)+" "+str(ppt)+"\n")
+    P,solution,q = fc.SDP_LHS(m,2,rho,rho_sep,eta,detp,medicoes)
+    print(P)
+    print(solution)
+
+    rho_q = rho*q+(1-q)*rho_sep
+    output_message = ("Optimal value from SDP\n",str(q),"\nResulting state\n",str(rho_q),"\nIs the state separable?\n")
+    f1.writelines(output_message)
+    w,v,ppt = fc.Ent_cert(rho_q)
+    if ppt == 0:
+        s = "Yes: separable state.\n"
+    else:
+        s = "No: entangled state.\n"
+    f1.write(s)
+    f3.write(" "+str(q)+" "+str(ppt)+"\n")
 
 # Closing the files
 f1.close()
