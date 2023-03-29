@@ -1,0 +1,2 @@
+Density matrix index	Entanglement	Locality
+0	1	0.333333333254205
