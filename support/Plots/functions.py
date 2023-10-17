@@ -142,7 +142,7 @@ def measurements(n,PLOT=False):
         # Good choice of colors: 'deeppink' and 'hotpink'
         polys.set_edgecolor('#35193e')
         polys.set_linewidth(.8)
-        polys.set_facecolor('#701f57')
+        polys.set_facecolor('#e13342')
         polys.set_alpha(.25)
         
         #Build the insphere
@@ -162,8 +162,8 @@ def measurements(n,PLOT=False):
         #Plot Bloch sphere
         ax.plot_surface(x_uni,y_uni,z_uni,color='#f6b48f',alpha=.15)
         #Plot insphere
-        # Good choice of color: 'lime', alpha=.35
-        ax.plot_surface(x,y,z,color='#e13342',alpha=.5)
+        # # Good choice of color: 'lime', alpha=.35
+        # ax.plot_surface(x,y,z,color='#e13342',alpha=.5)
         #Plot polyhedron
         ax.set_xlim3d(-1,1)
         ax.set_ylim3d(-1,1)
@@ -176,9 +176,9 @@ def measurements(n,PLOT=False):
         #plt.axis('off')
         
         ax.add_collection3d(polys)
-        ax.set_title(str(int(m_k/2))+' measurements',fontsize=20)
+        #ax.set_title(str(int(m_k/2))+' measurements',fontsize=20)
         #plt.show()
-        plt.savefig('poliedro_'+str(m_k)+'.png',dpi=300, bbox_inches='tight')
+        plt.savefig('poliedro_'+str(m_k)+'.png',dpi=300, bbox_inches='tight', transparent=True)
         plt.savefig('poliedro_'+str(m_k)+'.pdf', bbox_inches='tight')
     
     #Return the measurements and the insphere radius

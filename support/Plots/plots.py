@@ -3,21 +3,21 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FormatStrFormatter
-#sns.set_theme(style="darkgrid",palette='rocket')
+# sns.set_theme(style="darkgrid",palette='rocket')
 
-# print(sns.color_palette("rocket").as_hex())
-# Colors of rocket: ['#35193e', '#701f57', '#ad1759', '#e13342', '#f37651', '#f6b48f']
+# # print(sns.color_palette("rocket").as_hex())
+# # Colors of rocket: ['#35193e', '#701f57', '#ad1759', '#e13342', '#f37651', '#f6b48f']
 
-plt.rcParams['mathtext.fontset'] = 'stix'
-plt.rcParams['font.family'] = 'STIXGeneral'
+# plt.rcParams['mathtext.fontset'] = 'stix'
+# plt.rcParams['font.family'] = 'STIXGeneral'
 
-# Palette options: cubehelix, Spectral, deep, rocket
+# # Palette options: cubehelix, Spectral, deep, rocket
 
 # # First plot: Werner state
 
-# r = [0.5773502691896258, 0.8164965809277259, 0.8628562094610168]
-# q = [0.3333333367378584, 0.42040144526522283, 0.4407177404009949]
-# n = [" m = 3\n 0.24s", " m = 9\n 5.81s", " m = 13\n 352.33s"]
+# r = [0.5773502691896258, 0.8164965809277259, 0.8628562094610168, 0.9226021945439894]
+# q = [0.3333333367378584, 0.42040144526522283, 0.4407177404009949, 0.471154539928822]
+# n = [" m = 3\n 0.24s", " m = 9\n 5.81s", " m = 13\n 352.33s"," m = 16\n 19015.10s"]
 
 # c = np.linspace(0,1,20)
 # d = np.zeros(20)+0.5
@@ -25,9 +25,10 @@ plt.rcParams['font.family'] = 'STIXGeneral'
 # fig, ax = plt.subplots()
 
 # for i in range(len(n)):
-#     ax.annotate(n[i], (r[i], q[i]),xytext = (r[i]+0.01, q[i]-0.01))
+#     ax.annotate(n[i], (r[i], q[i]),xytext = (r[i]-0.02, q[i]+0.005))
 
-# ax.scatter(r, q,color = '#f37651', edgecolor = '#35193e')
+# ax.scatter(r[:-1], q[:-1],color = '#f37651', edgecolor = '#35193e')
+# ax.scatter(r[-1], q[-1],color = '#701f57', edgecolor = '#35193e')
 # ax.plot(c,d,color='#ad1759')
 
 # plt.text(0.85,0.505, 'Analytical result')
@@ -55,9 +56,10 @@ plt.rcParams['font.family'] = 'STIXGeneral'
 # # não suporta transparências bem)
 # fig.savefig('Werner.pdf', bbox_inches='tight') 
 
-# # Segundo plot: Politopos das medições
+# Segundo plot: Politopos das medições
 
 # for i in range(3): med, eta = fc.measurements(1+i,PLOT=True)
+med, eta = fc.pentakis(PLOT=True)
 
 # # Teste
 
